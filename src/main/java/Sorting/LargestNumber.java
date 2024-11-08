@@ -1,6 +1,7 @@
 package Sorting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -31,5 +32,26 @@ public class LargestNumber {
         }
         return largestNumber.toString();
 
+    }
+
+    public String largestNumber2(int[] nums) {
+        // Convert int[] to String[] for custom sorting
+        String[] numStrs = Arrays.stream(nums).mapToObj(String::valueOf).toArray(String[]::new);
+
+        // Sort with custom comparator
+        Arrays.sort(numStrs, (a, b) -> (b + a).compareTo(a + b));
+
+        // Edge case: if the largest number is "0", return "0"
+        if (numStrs[0].equals("0")) {
+            return "0";
+        }
+
+        // Build the result from the sorted array
+        StringBuilder result = new StringBuilder();
+        for (String numStr : numStrs) {
+            result.append(numStr);
+        }
+
+        return result.toString();
     }
 }
