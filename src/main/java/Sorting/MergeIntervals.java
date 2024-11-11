@@ -2,6 +2,7 @@ package Sorting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class MergeIntervals {
@@ -25,6 +26,9 @@ public class MergeIntervals {
                 merged.add(currentInterval);
             }
         }
+        HashMap<Integer,Integer> m = new HashMap<>();
+        int x=5;
+
         // Convert merged list to an array and return
         return merged.toArray(new int[merged.size()][]);
     }
