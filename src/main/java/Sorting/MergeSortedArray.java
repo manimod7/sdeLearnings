@@ -2,29 +2,37 @@ package Sorting;
 
 //Leetcode 88
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MergeSortedArray {
 
-    public void merge(int[] nums1, int m, int[] nums2, int n) {
-        int i=0,j=0, l = m+n,k=0;
-        int [] nums = new int[l];
-        while(i<m && j<n) {
-            if(nums1[i]<=nums2[j]) {
-                nums[k++] = nums1[i++];
+    public ArrayList<Integer> solve(final List<Integer> A, final List<Integer> B) {
+        int n = A.size(), m = B.size();
+        ArrayList<Integer> merged = new ArrayList<>(n + m);
+
+        int i = 0, j = 0;
+        // Merge until one list is exhausted
+        while (i < n && j < m) {
+            if (A.get(i) <= B.get(j)) {
+                merged.add(A.get(i));
+                i++;
+            } else {
+                merged.add(B.get(j));
+                j++;
             }
-            else {
-                nums[k++] = nums2[j++];
-            }
         }
-        while(i<m) {
-            nums[k++] = nums1[i++];
-        }
-        while(j<n) {
-            nums[k++] = nums2[j++];
-        }
-        i=0;
-        while(i<m+n) {
-            nums1[i] = nums[i];
+        // Append any remaining elements from A
+        while (i < n) {
+            merged.add(A.get(i));
             i++;
         }
+        // Append any remaining elements from B
+        while (j < m) {
+            merged.add(B.get(j));
+            j++;
+        }
+
+        return merged;
     }
 }

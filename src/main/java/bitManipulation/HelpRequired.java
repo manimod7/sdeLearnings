@@ -18,4 +18,15 @@ public class HelpRequired {
         }
         return ans;
     }
+
+    public int solve2(int A) {
+        int help = 0;
+        for(int i=0;i<32;i++) {
+            int set = 1<<i;
+            int setBit = A & set;
+            if(setBit>0)
+                help++;
+        }
+        return help;
+    }
 }
