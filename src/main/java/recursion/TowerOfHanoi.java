@@ -1,6 +1,30 @@
 package recursion;
 
+import java.util.ArrayList;
+
 public class TowerOfHanoi {
+
+    public ArrayList<ArrayList<Integer>> towerOfHanoi1(int A) {
+        ArrayList<ArrayList<Integer>> ans = new ArrayList();
+        int n = A;
+        helper(n,ans,1,3,2);
+        return ans;
+
+    }
+    public void helper(int n, ArrayList<ArrayList<Integer>> moves, int from, int to, int help) {
+        if(n==0)
+            return;
+        helper(n-1, moves, from, help, to);
+
+        moves.add(new ArrayList<Integer>(){{
+            add(n);
+            add(from);
+            add(to);
+        }});
+
+        helper(n-1,moves,help,to,from);
+    }
+
     private int moveIndex = 0;  // Class field to track the current move index
 
     public int[][] towerOfHanoi(int A) {
