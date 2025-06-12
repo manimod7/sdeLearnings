@@ -4,18 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Basic parking lot holding a list of spots.
+ * The parking lot containing multiple floors.
  */
 public class ParkingLot {
-    private final List<ParkingSpot> spots = new ArrayList<>();
+    private final List<ParkingFloor> floors = new ArrayList<>();
 
-    public void addSpot(ParkingSpot spot) {
-        spots.add(spot);
+    public void addFloor(ParkingFloor floor) {
+        floors.add(floor);
     }
 
     public ParkingSpot findSpot(VehicleType type) {
-        for (ParkingSpot spot : spots) {
-            if (spot.getType() == type && spot.isAvailable()) {
+        for (ParkingFloor floor : floors) {
+            ParkingSpot spot = floor.findSpot(type);
+            if (spot != null) {
                 return spot;
             }
         }
