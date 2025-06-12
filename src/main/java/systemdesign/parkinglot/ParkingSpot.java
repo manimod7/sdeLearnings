@@ -1,31 +1,35 @@
 package systemdesign.parkinglot;
 
 /**
- * Represents a parking spot in the lot.
+ * Represents an individual parking spot on a floor.
  */
 public class ParkingSpot {
-    private final int number;
+    private final String id;
     private final VehicleType type;
-    private boolean occupied;
+    private Vehicle parkedVehicle;
 
-    public ParkingSpot(int number, VehicleType type) {
-        this.number = number;
+    public ParkingSpot(String id, VehicleType type) {
+        this.id = id;
         this.type = type;
     }
 
-    public boolean isAvailable() {
-        return !occupied;
+    public boolean isFree() {
+        return parkedVehicle == null;
     }
 
-    public void occupy() {
-        occupied = true;
+    public void assignVehicle(Vehicle vehicle) {
+        this.parkedVehicle = vehicle;
     }
 
-    public void vacate() {
-        occupied = false;
+    public void removeVehicle() {
+        this.parkedVehicle = null;
     }
 
     public VehicleType getType() {
         return type;
+    }
+
+    public String getId() {
+        return id;
     }
 }

@@ -1,31 +1,30 @@
 # Parking Lot
 
 ## Overview
-A simplified parking lot system consisting of parking spots managed by a service. Each spot has a type such as car or bike.
+A more feature rich parking lot example demonstrating floors, entry and exit gates and ticket based billing.
 
 ## Why this design
-The intention is to show basic allocation of parking spots without external storage or complex rules.
+Vehicles are assigned to spots through gates and receive a ticket with the entry time. On leaving the lot the ticket is used to calculate the parking fee.
 
 ## Pros
-- Clear separation of responsibilities (`ParkingLot`, `ParkingService`).
-- Easy to extend with more spot types or pricing rules.
+- Shows the flow from vehicle entry to exit.
+- Keeps responsibilities separated between the lot, gates and payment service.
 
 ## Cons
-- Does not handle concurrency or reservations.
-- Parking spots exist only in memory.
+- In-memory state only with no concurrency control.
+- Spot search is naive and does not find the nearest spot.
 
 ## Possible improvements
-- Add persistence so the lot state survives restarts.
-- Support different pricing and billing strategies.
-- Implement search policies for the nearest available spot.
+- Persist tickets and payments.
+- Support reservations and sensors for real time availability.
 
 ## Patterns and principles
-- Demonstrates composition of objects to represent the domain.
+- Simple composition of objects representing the domain.
 
 ## High-level design
-`ParkingService` asks the `ParkingLot` for an available `ParkingSpot` of a given `VehicleType` and marks it as occupied.
+`EntryGate` requests an available `ParkingSpot` from the `ParkingLot` and issues a `ParkingTicket`. `ExitGate` calculates the fee using `PaymentService` and frees the spot.
 
 ## Low-level design
-- `ParkingSpot` stores its type and occupancy state.
-- `ParkingLot` keeps a list of spots and can find one matching a type.
-- `ParkingService` is a thin layer that handles park and unpark requests.
+- `ParkingLot` contains multiple `ParkingFloor` objects each with `ParkingSpot`s.
+- `EntryGate` assigns vehicles to spots and creates tickets.
+- `ExitGate` computes the charge and releases the vehicle from the spot.
