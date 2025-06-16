@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,20 +26,25 @@ public class ExecutorServiceDemo {
 
         // Using a fixed thread pool
         ExecutorService fixedPool = Executors.newFixedThreadPool(2);
-        fixedPool.execute(runnableTask); // returns no result
-        Future<String> future = fixedPool.submit(callableTask); // returns a Future
-        System.out.println(future.get());
+        fixedPool.execute(runnableTask); // execute without expecting a result
+        Future<String> future = fixedPool.submit(callableTask); // submit returns a Future
+        System.out.println("Result from future: " + future.get());
         fixedPool.shutdown();
+        fixedPool.awaitTermination(1, TimeUnit.SECONDS);
+        System.out.println("isShutdown: " + fixedPool.isShutdown());
+        System.out.println("isTerminated: " + fixedPool.isTerminated());
 
         // Using a single thread executor
         ExecutorService singleThread = Executors.newSingleThreadExecutor();
         singleThread.submit(runnableTask);
-        singleThread.shutdown();
+        System.out.println("invokeAny result: " + singleThread.invokeAny(Arrays.asList(callableTask)));
+        singleThread.shutdownNow();
 
         // Using a cached thread pool
         ExecutorService cachedPool = Executors.newCachedThreadPool();
         cachedPool.submit(callableTask);
         cachedPool.shutdown();
+        cachedPool.awaitTermination(1, TimeUnit.SECONDS);
 
         // Using invokeAll with multiple callables
         ExecutorService pool = Executors.newFixedThreadPool(3);
@@ -51,11 +57,17 @@ public class ExecutorServiceDemo {
         for (Future<String> r : results) {
             System.out.println(r.get());
         }
+        System.out.println("invokeAny result: " + pool.invokeAny(tasks));
         pool.shutdown();
+        pool.awaitTermination(1, TimeUnit.SECONDS);
 
         // Using a scheduled executor service
         ScheduledExecutorService scheduled = Executors.newScheduledThreadPool(1);
-        scheduled.schedule(() -> System.out.println("Delayed task"), 1, TimeUnit.SECONDS);
+        ScheduledFuture<?> handle = scheduled.schedule(() -> System.out.println("Delayed task"),
+                1, TimeUnit.SECONDS);
+        scheduled.scheduleAtFixedRate(() -> System.out.println("Periodic task"), 0, 500, TimeUnit.MILLISECONDS);
+        handle.get();
         scheduled.shutdown();
+        scheduled.awaitTermination(1, TimeUnit.SECONDS);
     }
 }
