@@ -1,11 +1,23 @@
 # Thread Utilities
 
-This package contains small demonstrations of core Java concurrency constructs.
+This package contains demonstrations of the most common Java concurrency constructs. Each class is heavily commented so you can understand what every method does.
 
-- **RunnableExample** – shows creating threads with `Runnable`.
-- **CallableExample** – demonstrates returning a value from a background task using `Callable` and `FutureTask`.
-- **ExecutorServiceDemo** – illustrates several variations of `ExecutorService` including fixed, cached and single-thread pools, as well as a scheduled executor service.
-- **ThreadExample** – extends the `Thread` class directly.
-- Additional classes show synchronization primitives such as locks and semaphores.
+## Basic thread creation
 
-These examples can be run individually using `java` or your IDE.
+* **ThreadExample** – minimal example of extending `Thread`.
+* **RunnableExample** – implements `Runnable` and runs the task in a `Thread`.
+* **ThreadMethodsDemo** – showcases `Thread` methods such as `setPriority`, `start`, `join`, `isAlive` and `interrupt`.
+
+## Returning results
+
+* **CallableExample** – uses `Callable` with `FutureTask` to return a value.
+* **FutureDemo** – explores operations on `Future` including `get`, `cancel` and running a `FutureTask` directly.
+
+## Executor frameworks
+
+* **ExecutorServiceDemo** – illustrates fixed, cached and single-thread pools, bulk operations like `invokeAll`/`invokeAny` and graceful shutdown. It also creates a scheduled executor for periodic tasks.
+* **ScheduledExecutorExample** – focuses exclusively on `ScheduledExecutorService`, showing delayed and periodic execution and how to cancel the returned `ScheduledFuture`.
+
+Additional classes demonstrate locks and other synchronization primitives such as semaphores and stamped locks.
+
+Run any example using `java` or from your IDE.
