@@ -20,4 +20,10 @@ This package contains demonstrations of the most common Java concurrency constru
 
 Additional classes demonstrate locks and other synchronization primitives such as semaphores and stamped locks.
 
+## Fork/Join framework
+
+* **forkjoin/ForkJoinDemo** – demonstrates using `ForkJoinPool` along with `RecursiveAction` and `RecursiveTask`.
+* **forkjoin/SumRecursiveAction** – sums a range of an array without returning a value.
+* **forkjoin/FibonacciRecursiveTask** – calculates a Fibonacci number and returns the result.
+
 Run any example using `java` or from your IDE.
