@@ -1,7 +1,7 @@
 package searching;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ public class MedianOfTwoSortedArraysTest {
         ArrayList<Integer> A = new ArrayList<>();
         ArrayList<Integer> B = new ArrayList<>(Collections.singletonList(5));
         int result = medianFinder.solve(A, B);
-        Assert.assertEquals(5, result);
+        assertEquals(5, result);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class MedianOfTwoSortedArraysTest {
         ArrayList<Integer> A = new ArrayList<>(Collections.singletonList(3));
         ArrayList<Integer> B = new ArrayList<>(Collections.singletonList(3));
         int result = medianFinder.solve(A, B);
-        Assert.assertEquals(3, result);
+        assertEquals(3, result);
     }
     
     @Test
@@ -33,7 +33,7 @@ public class MedianOfTwoSortedArraysTest {
         ArrayList<Integer> A = new ArrayList<>(Arrays.asList(1, 3, 5));
         ArrayList<Integer> B = new ArrayList<>(Arrays.asList(2, 4, 6));
         int result = medianFinder.solve(A, B);
-        Assert.assertEquals(3, result);
+        assertEquals(3, result);
     }
     
 }
