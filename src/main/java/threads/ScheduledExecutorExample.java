@@ -35,7 +35,11 @@ public class ScheduledExecutorExample {
         delayFuture.cancel(true);
 
         // Wait for the one-time task to complete
-        single.get();
+        try {
+            single.get();
+        } catch (java.util.concurrent.ExecutionException e) {
+            System.err.println("Error executing scheduled task: " + e.getMessage());
+        }
 
         // Shut down the scheduler gracefully
         scheduler.shutdown();

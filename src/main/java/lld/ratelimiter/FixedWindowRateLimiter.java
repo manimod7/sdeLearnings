@@ -37,7 +37,6 @@ public class FixedWindowRateLimiter implements RateLimitingStrategy {
     private final ConcurrentHashMap<String, WindowData> userWindows;
     private final ReentrantReadWriteLock cleanupLock;
     private volatile long lastCleanupTime;
-    Stream
     
     /**
      * Data structure to hold window information for a user.
