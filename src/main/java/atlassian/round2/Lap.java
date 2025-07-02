@@ -1,9 +1,8 @@
-package atlassian;
+package atlassian.round2;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter

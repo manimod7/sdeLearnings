@@ -1,4 +1,4 @@
-package atlassian;
+package atlassian.round2;
 
 import lombok.Getter;
 import lombok.Setter;
