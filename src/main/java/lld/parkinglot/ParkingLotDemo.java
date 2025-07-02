@@ -11,7 +11,7 @@ public class ParkingLotDemo {
     
     public static void main(String[] args) {
         System.out.println("🏢 Comprehensive Parking Lot Management System Demo 🏢");
-        System.out.println("=" * 60);
+        System.out.println("============================================================");
         
         // Create parking lot
         ParkingLot parkingLot = createParkingLot();

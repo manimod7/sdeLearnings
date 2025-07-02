@@ -50,10 +50,8 @@ public class User {
         return artistPlayCount.entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
                 .limit(limit)
-                .collect(LinkedHashMap::new,
-                        (map, entry) -> map.put(entry.getKey(), entry.getValue()),
-                        LinkedHashMap::putAll)
-                .keySet();
+                .map(Map.Entry::getKey)
+                .collect(LinkedHashSet::new, LinkedHashSet::add, LinkedHashSet::addAll);
     }
 
     // Getters

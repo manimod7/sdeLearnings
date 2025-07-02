@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ScorecardService {
     private final Map<String, Scorecard> scorecards;
     private final Map<String, User> users;
-    private final Map<String, Map<String, Map<String, Object>>> evaluations; // scorecardId -> evaluatorId -> responses
+    private final Map<String, Map<String, Map<String, Map<String, Object>>>> evaluations; // scorecardId -> evaluatorId -> (sectionId -> responses)
     private final NotificationService notificationService;
     
     public ScorecardService() {
@@ -197,13 +197,12 @@ public class ScorecardService {
         }
         
         Map<String, Scorecard.ScorecardScore> evaluatorScores = new HashMap<>();
-        Map<String, Map<String, Object>> allEvaluations = 
+        Map<String, Map<String, Map<String, Object>>> allEvaluations = 
             evaluations.getOrDefault(scorecardId, Collections.emptyMap());
         
-        for (Map.Entry<String, Map<String, Object>> entry : allEvaluations.entrySet()) {
+        for (Map.Entry<String, Map<String, Map<String, Object>>> entry : allEvaluations.entrySet()) {
             String evaluatorId = entry.getKey();
-            Scorecard.ScorecardScore score = scorecard.calculateScore(
-                Collections.singletonMap(scorecardId, entry.getValue()));
+            Scorecard.ScorecardScore score = scorecard.calculateScore(entry.getValue());
             evaluatorScores.put(evaluatorId, score);
         }
         
