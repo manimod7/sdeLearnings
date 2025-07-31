@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Debezium - Complete In-Depth Guide</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1c1c2b;
+            color: #eeeeee;
+            padding: 40px;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: auto;
+        }
+        h1, h2, h3 {
+            color: #00d0ff;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.4em;
+        }
+        code {
+            background: #333;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: Menlo, monospace;
+        }
+        pre {
+            background: #111;
+            padding: 16px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        a {
+            color: #4dc4ff;
+        }
+        .toc li {
+            margin-bottom: 8px;
+        }
+        hr {
+            border: 1px solid #333;
+            margin: 2em 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧠 Debezium – The Complete In-Depth Guide</h1>
+<p style="text-align:center; font-size: 1.1em;">For engineers, developers, architects and data engineers who want to understand Change Data Capture (CDC) with Debezium</p>
+
+<hr>
+
+<h2>📚 Table of Contents</h2>
+<ul class="toc">
+    <li><a href="#intro">1. What is Debezium?</a></li>
+    <li><a href="#cdc">2. Understanding Change Data Capture (CDC)</a></li>
+    <li><a href="#supported-dbs">3. Supported Databases</a></li>
+    <li><a href="#how-it-works">4. How Debezium Works</a></li>
+    <li><a href="#architecture">5. Technical Architecture</a></li>
+    <li><a href="#deployment-options">6. Deployment Options</a></li>
+    <li><a href="#use-cases">7. Real-World Use Cases</a></li>
+    <li><a href="#examples">8. Code Examples & Config</a></li>
+    <li><a href="#pros-cons">9. Pros and Cons</a></li>
+    <li><a href="#scaling">10. Scaling & Performance</a></li>
+    <li><a href="#troubleshooting">11. Troubleshooting & Monitoring</a></li>
+    <li><a href="#tools">12. Ecosystem & Tools</a></li>
+    <li><a href="#faq">13. FAQ</a></li>
+    <li><a href="#references">14. References</a></li>
+</ul>
+
+<hr>
+
+<h2 id="intro">🔍 1. What is Debezium?</h2>
+<p><strong>Debezium</strong> is an open-source distributed Change Data Capture (CDC) platform. It's built on top of <strong>Apache Kafka</strong> and <strong>Kafka Connect</strong> to stream real-time changes from your database into Kafka topics.</p>
+
+<p>It allows downstream applications, services, or event processors to consume and react to insert/update/delete events without querying the database over and over again.</p>
+
+<p>Think of Debezium as a way to treat your traditional database as a stream of events.</p>
+
+<h2 id="cdc">🔄 2. Understanding Change Data Capture (CDC)</h2>
+<p><strong>Change Data Capture (CDC)</strong> is a design pattern that captures changes in a database (INSERT, UPDATE, DELETE) and delivers them to other systems or services in real-time or near-real-time.</p>
+
+<p>Traditional systems use polling, batch loads (like ETL), or application-level callbacks — but these have drawbacks such as stale data, missing events, and increased coupling.</p>
+
+<p><strong>Log-based CDC</strong> (used by Debezium) reads from the append-only write-ahead logs (WAL, binlogs) of databases to provide an accurate, low-latency change stream.</p>
+
+<p>Benefits of CDC:</p>
+<ul>
+    <li>📥 Keeps systems synchronized in real-time</li>
+    <li>📤 Publishes events with little-to-no overhead</li>
+    <li>⚡ Allows event-driven architectures without touching app code</li>
+</ul>
+
+<hr>
+
+<h2 id="supported-dbs">📂 3. Supported Databases</h2>
+<p>Debezium supports multiple relational and some NoSQL databases. A connector is a Kafka Connect plugin that reads data changes from a specific database type.</p>
+
+<table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+    <thead style="background: #2c2c3c; color: #4fc3f7;">
+    <tr>
+        <th style="padding: 10px;">Database</th>
+        <th>Status</th>
+        <th>CDC Mechanism</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td style="padding: 10px;">MySQL / MariaDB</td>
+        <td>✅ Stable</td>
+        <td>Binlog</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">PostgreSQL</td>
+        <td>✅ Stable</td>
+        <td>WAL (Logical Replication)</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">MongoDB</td>
+        <td>✅ Stable</td>
+        <td>Oplog</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">SQL Server</td>
+        <td>✅ Stable</td>
+        <td>Transaction Log</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">Oracle</td>
+        <td>✅ Stable</td>
+        <td>LogMiner/XStream</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">Db2</td>
+        <td>✅ Stable</td>
+        <td>Database Journal</td>
+    </tr>
+    <tr>
+        <td style="padding: 10px;">Vitess / Spanner</td>
+        <td>⚠️ Incubating</td>
+        <td>Tablet binary logs / CDC</td>
+    </tr>
+    </tbody>
+</table>
+
+<p>Connectors are shipped as Kafka Connect plugins, and each database type requires a specific set of permissions and log configurations.</p>
+
+<hr>
+
+<h2 id="how-it-works">⚙️ 4. How Debezium Works</h2>
+<p>Debezium connectors run inside <code>Kafka Connect</code> (either distributed or standalone). Each connector instance:</p>
+
+<ol>
+    <li>Connects to the database and performs an optional initial snapshot (creates baseline if no offset exists)</li>
+    <li>Begins tailing the write-ahead transaction log of the source DB</li>
+    <li>For each change in the log, emits a <code>change event</code> in JSON (or Avro, or Protobuf)</li>
+    <li>Writes the event to a Kafka topic like <code>db.server1.inventory.products</code></li>
+    <li>Consumers can subscribe to these Kafka topics and react accordingly.</li>
+</ol>
+
+<p>Here's what a Kafka change event might look like (for PostgreSQL):</p>
+
+<pre><code>{
+  "before": { "id": 1, "name": "old", "price": 100 },
+  "after":  { "id": 1, "name": "new", "price": 150 },
+  "source": { "db": "sales", "ts_ms": 1710000000000 },
+  "op": "u",   // operation: c=create, u=update, d=delete
+  "ts_ms": 1710000001000
+}
+</code></pre>
+
+<p>Each connector maintains internal offsets and resume points via Kafka. This allows:</p>
+<ul>
+    <li>High availability and crash recovery</li>
+    <li>Offset checkpointing across Kafka partitions</li>
+    <li>Replay of changes by rewinding Kafka offsets</li>
+</ul>
+
+<hr>
